@@ -33,7 +33,7 @@ migrate -path migrations/ -database "postgresql://admin:admin@localhost:5432/fin
 
 ## Features
 ### V0.1
-- [ ] Signup
+- [x] Signup
 - [ ] Sign in
 - [ ] Register income
 - [ ] Register outcome
