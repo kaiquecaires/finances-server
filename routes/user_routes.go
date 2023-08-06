@@ -9,9 +9,9 @@ import (
 
 func SetupUserRoutes(r *gin.Engine, dbPool *pgxpool.Pool) {
 	r.POST("/signup", func(ctx *gin.Context) {
-		repository := &repositories.UserRepository{DbPool: dbPool}
+		repository := &repositories.UsersRepository{DbPool: dbPool}
 		handler := &handlers.SignupHandler{
-			UserRepository: repository,
+			UsersRepository: repository,
 		}
 		handler.Handler(ctx)
 	})

@@ -11,7 +11,7 @@ import (
 )
 
 type SignupHandler struct {
-	UserRepository *repositories.UserRepository
+	UsersRepository *repositories.UsersRepository
 }
 
 func (d *SignupHandler) Handler(c *gin.Context) {
@@ -29,7 +29,7 @@ func (d *SignupHandler) Handler(c *gin.Context) {
 		return
 	}
 
-	user, err := d.UserRepository.Create(data)
+	user, err := d.UsersRepository.Create(data)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err})
