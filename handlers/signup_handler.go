@@ -11,7 +11,8 @@ import (
 )
 
 type SignupHandler struct {
-	UsersRepository *repositories.UsersRepository
+	UsersRepository         *repositories.UsersRepository
+	UserPasswordsRepository *repositories.UserPasswordsRepository
 }
 
 func (d *SignupHandler) Handler(c *gin.Context) {
@@ -30,6 +31,13 @@ func (d *SignupHandler) Handler(c *gin.Context) {
 	}
 
 	user, err := d.UsersRepository.Create(data)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err})
+		return
+	}
+
+	_, err = d.UserPasswordsRepository.Create(user.Id, data.Password)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err})
