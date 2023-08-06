@@ -15,7 +15,7 @@ func (ur *UsersRepository) Create(data models.SignupModel) (models.UserModel, er
 	var insertedID string
 	err := ur.DbPool.QueryRow(
 		context.Background(),
-		"INSERT INTO users (email, name, socialName, birthday) VALUES ($1, $2, $3, $4) RETURNING id",
+		"INSERT INTO users (email, name, social_name, birthday) VALUES ($1, $2, $3, $4) RETURNING id",
 		data.Email,
 		data.Name,
 		data.SocialName,

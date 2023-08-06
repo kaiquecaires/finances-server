@@ -18,7 +18,7 @@ https://github.com/golang-migrate/migrate#cli-usage
 
 ## Create
 ```bash
-  migrate create -ext sql -dir db/migration/ -seq your_migration_name
+  migrate create -ext sql -dir /migrations -seq your_migration_name
 ```
 
 ## Run migrations down
