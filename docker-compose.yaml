@@ -1,0 +1,26 @@
+version: "3.9"
+
+services:
+  # PostgreSQL service
+  db:
+    image: postgres:latest
+    container_name: finances_postgres_db
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "5432:5432"
+
+  # Go application service
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: finances
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
