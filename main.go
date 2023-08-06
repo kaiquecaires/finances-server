@@ -15,5 +15,5 @@ func main() {
 		})
 	})
 	routes.UserRoutes(r)
-	r.Run("localhost:3000")
+	r.Run()
 }
