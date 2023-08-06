@@ -7,10 +7,14 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/kaiquecaires/finances-server/helpers"
 	"github.com/kaiquecaires/finances-server/models"
-	"github.com/kaiquecaires/finances-server/usecases"
+	"github.com/kaiquecaires/finances-server/repositories"
 )
 
-func SignupHandler(c *gin.Context) {
+type SignupHandler struct {
+	UserRepository *repositories.UserRepository
+}
+
+func (d *SignupHandler) Handler(c *gin.Context) {
 	var data models.SignupModel
 
 	if err := c.ShouldBindJSON(&data); err != nil {
@@ -25,6 +29,12 @@ func SignupHandler(c *gin.Context) {
 		return
 	}
 
-	user := usecases.Signup(&data)
+	user, err := d.UserRepository.Create(data)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{"user": user})
 }

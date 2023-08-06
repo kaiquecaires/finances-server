@@ -23,12 +23,12 @@ https://github.com/golang-migrate/migrate#cli-usage
 
 ## Run migrations down
 ```bash
-migrate -path db/postgres/migrations -database "postgresql://admin:admin@localhost:5432/finances?sslmode=disable" -verbose down
+migrate -path migrations/ -database "postgresql://admin:admin@localhost:5432/finances?sslmode=disable" -verbose down
 ```
 
 ## Run migrations up
 ```bash
-migrate -path db/postgres/migrations -database "postgresql://admin:admin@localhost:5432/finances?sslmode=disable" -verbose up
+migrate -path migrations/ -database "postgresql://admin:admin@localhost:5432/finances?sslmode=disable" -verbose up
 ```
 
 ## Features
