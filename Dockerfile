@@ -8,5 +8,6 @@ RUN go build -o finances .
 FROM alpine:latest
 WORKDIR /app
 COPY --from=build /app/finances .
+COPY .env .
 EXPOSE 8080
 CMD ["./finances"]
