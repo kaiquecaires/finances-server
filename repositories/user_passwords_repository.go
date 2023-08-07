@@ -4,20 +4,15 @@ import (
 	"context"
 
 	"github.com/jackc/pgx/v5/pgxpool"
-	"golang.org/x/crypto/bcrypt"
+	"github.com/kaiquecaires/finances-server/helpers"
 )
 
 type UserPasswordsRepository struct {
 	DbPool *pgxpool.Pool
 }
 
-func hashPassword(password string) (string, error) {
-	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
-	return string(bytes), err
-}
-
 func (up *UserPasswordsRepository) Create(userId string, password string) (string, error) {
-	hashedPassword, err := hashPassword(password)
+	hashedPassword, err := helpers.HashPassword(password)
 
 	if err != nil {
 		return "", err
