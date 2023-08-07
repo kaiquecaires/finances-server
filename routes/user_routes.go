@@ -18,4 +18,11 @@ func SetupUserRoutes(r *gin.Engine, dbPool *pgxpool.Pool) {
 		}
 		handler.Handler(ctx)
 	})
+
+	r.POST("/login", func(ctx *gin.Context) {
+		handler := &handlers.LoginHandler{
+			UsersRepository: usersRepository,
+		}
+		handler.Handler(ctx)
+	})
 }

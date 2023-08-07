@@ -34,3 +34,26 @@ func (ur *UsersRepository) Create(data models.SignupModel) (models.UserModel, er
 		Birthday:   data.Birthday,
 	}, nil
 }
+
+type UserWithPasswordHash struct {
+	User         models.UserModel
+	PasswordHash string
+}
+
+func (ur *UsersRepository) GetWithPassword(email string) (UserWithPasswordHash, error) {
+	var user UserWithPasswordHash
+
+	err := ur.DbPool.QueryRow(
+		context.Background(),
+		"SELECT u.id, u.name, u.social_name, u.birthday, up.password FROM users u INNER JOIN user_passwords up ON up.user_id = u.id WHERE u.email = $1",
+		email,
+	).Scan(&user.User.Id, &user.User.Name, &user.User.SocialName, &user.User.Birthday, &user.PasswordHash)
+
+	if err != nil {
+		return UserWithPasswordHash{}, err
+	}
+
+	user.User.Email = email
+
+	return user, nil
+}
