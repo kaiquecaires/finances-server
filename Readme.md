@@ -18,23 +18,23 @@ https://github.com/golang-migrate/migrate#cli-usage
 
 ## Create
 ```bash
-  migrate create -ext sql -dir /migrations -seq your_migration_name
+  migrate create -ext sql -dir ./migrations -seq your_migration_name
 ```
 
 ## Run migrations down
 ```bash
-migrate -path migrations/ -database "postgresql://admin:admin@localhost:5432/finances?sslmode=disable" -verbose down
+migrate -path ./migrations/ -database "postgresql://admin:admin@localhost:5432/finances?sslmode=disable" -verbose down
 ```
 
 ## Run migrations up
 ```bash
-migrate -path migrations/ -database "postgresql://admin:admin@localhost:5432/finances?sslmode=disable" -verbose up
+migrate -path ./migrations/ -database "postgresql://admin:admin@localhost:5432/finances?sslmode=disable" -verbose up
 ```
 
 ## Features
 ### V0.1
 - [x] Signup
-- [ ] Sign in
+- [x] Sign in
 - [ ] Register income
 - [ ] Register outcome
 - [ ] List transactions
