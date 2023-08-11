@@ -1,6 +1,9 @@
+CREATE TYPE transactionType as ENUM ('income', 'outcome');
+
 CREATE TABLE transactions (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   description VARCHAR(255),
+  type transactionType,
   bill_category_id UUID REFERENCES bill_categories(id) ON DELETE CASCADE,
   user_id UUID REFERENCES users(id) ON DELETE CASCADE,
   amount NUMERIC(10, 2),

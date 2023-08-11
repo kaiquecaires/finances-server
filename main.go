@@ -32,5 +32,6 @@ func main() {
 	})
 
 	routes.SetupUserRoutes(r, pool)
+	routes.SetupTransactionsRoutes(r, pool)
 	r.Run(os.Getenv("APP_PORT"))
 }
