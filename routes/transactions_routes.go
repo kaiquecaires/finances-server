@@ -21,4 +21,14 @@ func SetupTransactionsRoutes(r *gin.Engine, dbPool *pgxpool.Pool) {
 
 		handler.Handler(ctx)
 	})
+
+	authorized.GET("/", func(ctx *gin.Context) {
+		handler := handlers.ListTransactionsHandler{
+			TransactionsRepository: repositories.TransactionsRepository{
+				DbPool: dbPool,
+			},
+		}
+
+		handler.Handler(ctx)
+	})
 }
