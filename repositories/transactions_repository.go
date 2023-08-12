@@ -41,13 +41,16 @@ func (t TransactionsRepository) Create(data models.CreateTransactionModel) (mode
 	}, nil
 }
 
-func (t TransactionsRepository) List(userId string) ([]models.TransactionModel, error) {
+func (t TransactionsRepository) List(userId string, limit int, page int) ([]models.TransactionModel, error) {
 	var transactions []models.TransactionModel
+	offset := (page - 1) * limit
 
 	rows, err := t.DbPool.Query(
 		context.Background(),
-		"SELECT id, description, bill_category_id, user_id, amount, date, type FROM transactions WHERE user_id = $1 ORDER BY date DESC",
+		"SELECT id, description, bill_category_id, user_id, amount, date, type FROM transactions WHERE user_id = $1 ORDER BY date DESC LIMIT $2 OFFSET $3",
 		userId,
+		limit,
+		offset,
 	)
 
 	if err != nil {
@@ -86,4 +89,16 @@ func (t TransactionsRepository) GetAmount(userId string) (decimal.Decimal, error
 	).Scan(&amount)
 
 	return amount, err
+}
+
+func (t TransactionsRepository) GetTotal(userId string) (int, error) {
+	var total int
+
+	err := t.DbPool.QueryRow(
+		context.Background(),
+		"SELECT count(1) FROM transactions WHERE user_id = $1",
+		userId,
+	).Scan(&total)
+
+	return total, err
 }

@@ -5,6 +5,9 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
+	"github.com/kaiquecaires/finances-server/helpers"
+	"github.com/kaiquecaires/finances-server/models"
 	"github.com/kaiquecaires/finances-server/repositories"
 )
 
@@ -14,11 +17,25 @@ type ListTransactionsHandler struct {
 
 func (d *ListTransactionsHandler) Handler(c *gin.Context) {
 	userId := c.MustGet("UserID").(string)
-	transactions, err := d.TransactionsRepository.List(userId)
+	var queryParams models.ListTransactionsModel
+
+	if err := c.ShouldBindQuery(&queryParams); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to parse JSON data"})
+	}
+
+	validate := validator.New()
+
+	if err := validate.Struct(queryParams); err != nil {
+		errs := err.(validator.ValidationErrors)
+		c.JSON(http.StatusBadRequest, gin.H{"error": helpers.ValidationErrorsToString(errs)})
+		return
+	}
+
+	transactions, err := d.TransactionsRepository.List(userId, queryParams.Limit, queryParams.Page)
 
 	if err != nil {
 		fmt.Println(err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error to get transactions"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error fetching transactions"})
 		return
 	}
 
@@ -26,9 +43,29 @@ func (d *ListTransactionsHandler) Handler(c *gin.Context) {
 
 	if err != nil {
 		fmt.Println(err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error to get transactions"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error fetching transactions"})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"transactions": transactions, "totalAmount": totalAmount})
+	total, err := d.TransactionsRepository.GetTotal(userId)
+
+	if err != nil {
+		fmt.Println(err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error fetching transactions"})
+		return
+	}
+
+	pages := total / queryParams.Limit
+
+	if pages == 0 {
+		pages = 1
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"totalAmount":  totalAmount,
+		"pages":        pages,
+		"page":         queryParams.Page,
+		"transactions": transactions,
+		"total":        total,
+	})
 }
