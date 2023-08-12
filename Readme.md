@@ -37,8 +37,8 @@ migrate -path ./migrations/ -database "postgresql://admin:admin@localhost:5432/f
 - [x] Sign in
 - [x] Register income
 - [x] Register outcome
-- [ ] List transactions
-- [ ] Get total amount
+- [x] List transactions
+- [x] Get total amount
 
 ### V0.2
 - [ ] Delete transactions
