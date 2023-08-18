@@ -3,6 +3,7 @@ package handlers
 import (
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -47,7 +48,8 @@ func (d *LoginHandler) Handler(c *gin.Context) {
 	}
 
 	s, err := helpers.GenerateSignedJWT(jwt.MapClaims{
-		"user_id": userWithPassword.User.Id,
+		"user_id":   userWithPassword.User.Id,
+		"ExpiresAt": time.Now().Add(time.Hour * 24),
 	})
 
 	fmt.Println(err)

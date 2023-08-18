@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/golang-jwt/jwt/v5"
 )
@@ -35,6 +36,13 @@ func ValidateJWT(tokenString string) (*jwt.MapClaims, error) {
 	}
 
 	if claims, ok := token.Claims.(*jwt.MapClaims); ok && token.Valid {
+		// Check if the token is expired
+		if expirationTime, ok := (*claims)["ExpiresAt"].(time.Time); ok {
+			if time.Now().Unix() > expirationTime.Unix() {
+				return nil, fmt.Errorf("token has expired")
+			}
+		}
+
 		return claims, nil
 	} else {
 		return nil, fmt.Errorf("invalid token")
