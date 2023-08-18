@@ -32,32 +32,16 @@ migrate -path ./migrations/ -database "postgresql://admin:admin@localhost:5432/f
 ```
 
 ## Features
-### V0.1
 - [x] Signup
 - [x] Sign in
 - [x] Register income
 - [x] Register outcome
 - [x] List transactions
 - [x] Get total amount
-
-### V0.2
-- [ ] Delete transactions
+- [x] Delete transactions
 - [ ] Register recurring bills
-- [ ] Config notifications
-- [ ] Logout
-
-### V0.3
-- [ ] Add category investment 
-- [ ] Add Investments to category
-- [ ] Remove investments from category
-
-### V1
-- [ ] Deploy
-
 
 ## Entities
-
-### V0.1
 ### User
 - Unique identifier
 - Name
@@ -70,9 +54,14 @@ migrate -path ./migrations/ -database "postgresql://admin:admin@localhost:5432/f
 - Account Unique identifier
 - Password
 
+### Bill Categories
+- Unique identifier
+- Description
+
 ### Transactions
 - Unique identifier
 - Unique user identifier
+- Unique bill category
 - Type (income or outcome)
 - Value
 - Date

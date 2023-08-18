@@ -47,7 +47,7 @@ func (t TransactionsRepository) List(userId string, limit int, page int) ([]mode
 
 	rows, err := t.DbPool.Query(
 		context.Background(),
-		"SELECT id, description, bill_category_id, user_id, amount, date, type FROM transactions WHERE user_id = $1 ORDER BY date DESC LIMIT $2 OFFSET $3",
+		"SELECT id, description, bill_category_id, user_id, amount, date, type FROM transactions WHERE user_id = $1 AND deleted_at IS NULL ORDER BY date DESC LIMIT $2 OFFSET $3",
 		userId,
 		limit,
 		offset,
@@ -101,4 +101,14 @@ func (t TransactionsRepository) GetTotal(userId string) (int, error) {
 	).Scan(&total)
 
 	return total, err
+}
+
+func (t TransactionsRepository) Delete(id string) error {
+	_, err := t.DbPool.Exec(
+		context.Background(),
+		"UPDATE transactions SET deleted_at = now() WHERE id = $1",
+		id,
+	)
+
+	return err
 }

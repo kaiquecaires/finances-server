@@ -31,4 +31,14 @@ func SetupTransactionsRoutes(r *gin.Engine, dbPool *pgxpool.Pool) {
 
 		handler.Handler(ctx)
 	})
+
+	authorized.DELETE("/", func(ctx *gin.Context) {
+		handler := handlers.DeleteTransactionHandler{
+			TransactionsRepository: repositories.TransactionsRepository{
+				DbPool: dbPool,
+			},
+		}
+
+		handler.Handle(ctx)
+	})
 }
