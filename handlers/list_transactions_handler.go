@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -34,7 +33,6 @@ func (d *ListTransactionsHandler) Handler(c *gin.Context) {
 	transactions, err := d.TransactionsRepository.List(userId, queryParams.Limit, queryParams.Page)
 
 	if err != nil {
-		fmt.Println(err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error fetching transactions"})
 		return
 	}
@@ -42,7 +40,6 @@ func (d *ListTransactionsHandler) Handler(c *gin.Context) {
 	totalAmount, err := d.TransactionsRepository.GetAmount(userId)
 
 	if err != nil {
-		fmt.Println(err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error fetching transactions"})
 		return
 	}
@@ -50,7 +47,6 @@ func (d *ListTransactionsHandler) Handler(c *gin.Context) {
 	total, err := d.TransactionsRepository.GetTotal(userId)
 
 	if err != nil {
-		fmt.Println(err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error fetching transactions"})
 		return
 	}
